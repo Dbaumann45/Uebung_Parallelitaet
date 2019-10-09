@@ -23,12 +23,16 @@ class DemoThread extends Thread {
 public class Main{
 
     private static List<String> liste = new ArrayList<>();
-    private static List<String> zahlen = new ArrayList<>();
+    private static List<String> list = new ArrayList<>();
+    private static List<Integer> zahlen = new ArrayList<>();
     
     public static void main(String[] args) throws FileNotFoundException {
+        Scanner s1 = new Scanner(System.in);
+        s1.useDelimiter("\n");
         CSVReader();
         zahlen.forEach(s -> System.out.println(s));
-        System.out.println(zahlen.size());
+        System.out.println("Teiler eingeben:");
+        int i = s1.nextInt();
     }
     
     public static void CSVReader() throws FileNotFoundException
@@ -54,10 +58,16 @@ public class Main{
             }
             if(zahl == true)
             {
-                zahlen.add(liste.get(i));
+                list.add(liste.get(i));
             }
+            zahlen.add(Integer.parseInt(list.get(i)));
         }
         
+        
+    }
+    
+    public static void findTeilbar(int h)
+    {
         
     }
 
