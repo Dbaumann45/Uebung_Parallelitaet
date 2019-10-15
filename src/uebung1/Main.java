@@ -11,9 +11,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-class DemoThread extends Thread {
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+class TeilerThread extends Thread {
   
+    public void run(List<String> liste, int teiler, int chunk) {
+      findTeilbar(teiler, liste);
+    }
     
+    public void findTeilbar(int h, List<String> liste)
+    {
+        for(int i = 0;i < liste.size();i++)
+        {
+            if(Integer.parseInt(liste.get(i)) % h == 0 && Integer.parseInt(liste.get(i)) >= h)
+            {
+                System.out.println(liste.get(i));
+            }
+        }
+    } 
   
   }
 /**
@@ -25,18 +40,33 @@ public class Main{
     private static List<String> liste = new ArrayList<>();
     private static List<String> zahlen = new ArrayList<>();
     
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException{
         Scanner s1 = new Scanner(System.in);
         s1.useDelimiter("\n");
         CSVReader();
         zahlen.forEach(s -> System.out.println(s));
+        System.out.println(zahlen.size()); //33792
         System.out.print("Chunks eingeben: ");
-        int t = s1.nextInt();
+        int chunk = s1.nextInt();
 
         System.out.print("Teiler eingeben: ");
-        int i = s1.nextInt();
-
-        findTeilbar(i);
+        int teiler = s1.nextInt();
+        
+        ExecutorService executorService = Executors.newFixedThreadPool(chunk);
+        Runnable task = () -> {
+            findTeilbar(teiler);
+        };
+        
+        for(int i = 0; i < chunk; i++) {
+            executorService.submit(task);
+        }
+        /*for(int c = 0;c < t;c++)
+        {
+            TeilerThread a = new TeilerThread();
+        }
+        
+        findTeilbar(i);*/
+        
     }
     
     public static void CSVReader() throws FileNotFoundException
@@ -79,6 +109,8 @@ public class Main{
             }
         }
     }
+    
+ 
 
 
     
